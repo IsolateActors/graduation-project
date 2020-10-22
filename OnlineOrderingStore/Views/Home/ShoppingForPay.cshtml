@@ -1,0 +1,102 @@
+﻿@model ShoppingForPayViewModel
+
+@{
+    ViewData["Title"] = "ShoppingForPay";
+    var photoPath = "~/images/" + (Model.Goods.PhotoPath ?? "noimage.jpg");
+}
+
+<div class="row justify-content-center m-3">
+    <div class="col-md-10">
+        <div class="card">
+            <form asp-controller="home" asp-action="ShoppingForPay" asp-route-goodsId="@Model.Goods.Id" method="post">
+
+                <div class="card-header text-center">
+                    <h4 style="color:burlywood">@Model.Goods.Name</h4>
+                    <h6 style="color:darkgray">店铺：@Model.Goods.StoreUser.StoreName</h6>
+                </div>
+
+                <div class="card-body text-center">
+                    <img class="card-img-top col-lg-5" src="@photoPath" asp-append-version="true" />
+                    <hr />
+                    <h4>单价: ￥<span id="money">@Model.Goods.Price</span></h4>
+                    <div class="row justify-content-center">
+                        <button type="button" id="reduce" class="btn btn-secondary"> - </button>
+                        <input asp-for="GoodsCount" id="goodsCount" type="text" class="form-control col-2 ml-2 mr-2" value="1" />
+                        <button type="button" id="add" class="btn btn-secondary">+</button>
+                    </div>
+                    <h4>总价: ￥<span id="allMoney">@Model.Goods.Price</span></h4>
+                    <input asp-for="AllPay" type="hidden" id="allMoneyForInput" value="@Model.Goods.Price"/>
+                    <hr />
+
+
+                    <div class="row justify-content-center m-3">
+                        <label class="control-label col-md-4 col-lg-2">收货人：</label>
+                        <input asp-for="ConsigneeName" class="form-control col-md-8 col-lg-4" placeholder="请输入姓名" />
+                        <span asp-validation-for="ConsigneeName" class="text-danger"></span>
+                    </div>
+                    <div class="row justify-content-center m-3">
+                        <label class="control-label col-md-4 col-lg-2">电话：</label>
+                        <input asp-for="Phone" class="form-control col-md-8 col-lg-4" placeholder="请输入手机号" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    <div class="row justify-content-center m-3">
+                        <label class="control-label col-md-4 col-lg-2">地址：</label>
+                        <input asp-for="Address" class="form-control col-md-8 col-lg-4" placeholder="请输入地址及宿舍号" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a asp-controller="home" asp-action="index"
+                       class="btn btn-outline-primary">取消</a>
+                    <input type="submit" class="btn btn-outline-warning" value="立即支付"/>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+        var count = $("#goodsCount");
+        var money = $("#money").text();
+        var allMoney = $("#allMoney");
+        var allMoneyForInput = $("allMoneyForInput");
+        function updateMoney() {
+            var num = count.val();
+            var total = (money * num).toFixed(2);   //输入框中的份额数与每份金额数相乘得到总金额
+            allMoney.text(total);
+            allMoneyForInput.val(total);
+            if (count.val() <= 0) {
+                count.text(1);
+                allMoney.text(money);
+                allMoneyForInput.val(money);
+            }
+        }
+        $(function () {
+            $("#add").click(function () {
+                count.val(parseInt(count.val()) + 1); //点击加号输入框数值加1
+                updateMoney();  //显示总金额
+            });
+            $("#reduce").click(function () {
+                count.val(parseInt(count.val()) - 1); //点击减号输入框数值减1
+                if (count.val() <= 0) {
+                    count.val(parseInt(count.val()) + 1); //最小值为1
+                }
+                updateMoney();
+            });
+            $("#goodsCount").keyup(function () {
+                var c = $(this);
+                if (/[^\d]/.test(c.val())) {//替换非数字字符
+                    var amount = c.val().replace(/[^\d]/g, '');
+                    $(this).val(amount);
+                }
+                if (c.val() == 0) {
+                    $(this).val(1);
+                }
+                updateMoney();  //手动输入数值金额随之改变
+            });
+        });
+    </script>
+
+}

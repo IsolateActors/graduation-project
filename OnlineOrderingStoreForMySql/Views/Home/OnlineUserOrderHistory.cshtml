@@ -1,0 +1,67 @@
+﻿@model IList<Order>
+
+@{
+    ViewData["Title"] = "历史订单";
+}
+
+<h1 class="text-center">历史订单</h1>
+
+<hr />
+
+<table class="table table-hover">
+    <thead class="text-center">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].CreateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Pay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].ConsigneeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Address)
+            </th>
+
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConsigneeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+
+                <td>
+                    <a class="btn btn-outline-info" asp-action="OnlineUserOrderHistoryDetail" asp-route-id="@item.Id">查看</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

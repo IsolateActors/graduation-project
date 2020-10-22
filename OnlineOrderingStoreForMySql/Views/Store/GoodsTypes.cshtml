@@ -1,0 +1,185 @@
+﻿@model IEnumerable<GoodsType>
+
+@{
+    ViewData["Title"] = "分类管理";
+}
+
+<h1 class="text-center">商品类型</h1>
+
+<hr />
+<div class="container row">
+    <p class="col-md-4">
+        <button data-id="" class="btn btn-info btn-block text-white" data-toggle="modal" data-target="#modalCreateAndEdit">新建分类</button>
+    </p>
+</div>
+
+<table class="table table-hover">
+    <thead class="text-center">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.GoodsTypeName)</th>
+            <th>@Html.DisplayNameFor(model => model.CreateTime)</th>
+            <th>@Html.DisplayNameFor(model => model.EditTime)</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+
+    <tbody class="text-center">
+        @foreach (var item in Model)
+        {
+            <tr id="item_@item.ID">
+                <td>@Html.DisplayFor(model => item.GoodsTypeName)</td>
+                <td>@Html.DisplayFor(model => item.CreateTime)</td>
+                <td>@Html.DisplayFor(model => item.EditTime)</td>
+                <td>
+                    <button data-id="@item.ID" class="btn btn-outline-warning" data-toggle="modal" data-target="#modalCreateAndEdit">修改</button>
+                    <button data-id="@item.ID" data-delete="@item.GoodsTypeName" class="btn btn-outline-danger" data-toggle="modal" data-target="#modalDelete">删除</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="modalCreateAndEdit" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">信息</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="CreateOrEdit">
+                <div class="container">
+                    <div class="form-group">
+                        <p>不能超过5个字！</p>
+                        <input id="idInput" type="hidden" />
+                        <input id="typeNameInput" class="form-control" placeholder="请输入类型" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="ensuresubmit" class="btn btn-success">确定</button>
+                <button class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalDelete" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">删除</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="Delete">
+                确定删除<span>xxx?</span>
+                <input type="hidden" />
+            </div>
+            <div class="modal-footer">
+                <button id="ensuredelete" class="btn btn-danger">确定</button>
+                <button class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="successOrNot" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="resultMessage">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        //模态框事件
+        $('#modalDelete').on('show.bs.modal', function (event) {
+            //删除
+            var button = $(event.relatedTarget)
+            var recipient = button.data('delete')
+            var id = button.data('id')
+            var modal = $(this)
+            modal.find('#Delete input').val(id);
+            modal.find('#Delete span').text(recipient + "?")
+        });
+
+        //添加和修改
+        $('#modalCreateAndEdit').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var value = button.data('id')
+            var modal = $(this)
+            $.get({
+                url: "/Store/GoodsTypeCreateOrEdit",
+                data: { "id": value },
+                dataType:'json',
+                success: function (result) {
+                    modal.find('#idInput').val(result.id);
+                    modal.find('#typeNameInput').val(result.typeName);
+                }
+            });
+        });
+
+        //删除后
+        $(function () {
+            $("#ensuredelete").click(function() {
+                var page = "/Store/GoodsTypeDelete";
+                var value = $('#Delete input').val();
+                $.get({
+                    url: page,
+                    data: { "id": value },
+                    success: function(result) {
+                        $('#modalDelete').modal('hide');
+                        var modal = $('#successOrNot');
+                        modal.find('#resultMessage').text(result);
+                        $('#successOrNot').modal('show');
+
+                        if (result === "删除成功") {
+                            setTimeout(function () {
+                                //window.location.reload();
+                                $('#successOrNot').modal('hide');
+                                $("#item_" + value).remove();
+                            }, 1500);
+                        } else {
+                            setTimeout(function () {
+                                //window.location.reload();
+                                $('#successOrNot').modal('hide');
+                            }, 1500);
+                        }
+                        
+
+                    }
+                });
+            });
+
+            //添加和修改后
+            $("#ensuresubmit").click(function() {
+                var page = "/Store/GoodsTypeCreateOrEdit";
+                var id = $('#idInput').val();
+                var goodTypeName = $('#typeNameInput').val();
+                $.post({
+                    url: page,
+                    data: { "id": id , "goodTypeName": goodTypeName},
+                    success: function (result) {
+                        $('#modalCreateAndEdit').modal('hide');
+                        var modal = $('#successOrNot');
+                        modal.find('#resultMessage').text(result);
+                        $('#successOrNot').modal('show');
+                        setTimeout(function () { window.location.reload(); }, 1500);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+}

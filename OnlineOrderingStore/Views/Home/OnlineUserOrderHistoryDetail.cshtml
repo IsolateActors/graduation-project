@@ -1,0 +1,43 @@
+﻿@model IList<GoodsWithOrder>
+@{
+    ViewData["Title"] = "订单信息";
+}
+
+<h1 class="text-center">订单信息</h1>
+
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-sm-10 col-lg-4">
+        <hr />
+        <dl class="row offset-2">
+
+            @foreach (var item in Model)
+            {
+                <dt class="col-6">@item.Goods.Name</dt>
+                <dd class="col-6">   x @item.BuyCount</dd>
+            }
+
+            <dt class="col-6">@Html.DisplayNameFor(model => model[0].Order.CreateTime)</dt>
+            <dd class="col-6">@Html.DisplayFor(model => model[0].Order.CreateTime)</dd>
+
+            <dt class="col-6">@Html.DisplayNameFor(model => model[0].Order.ConsigneeName)</dt>
+            <dd class="col-6">@Html.DisplayFor(model => model[0].Order.ConsigneeName)</dd>
+
+            <dt class="col-6">@Html.DisplayNameFor(model => model[0].Order.Phone)</dt>
+            <dd class="col-6">@Html.DisplayFor(model => model[0].Order.Phone)</dd>
+
+            <dt class="col-6">@Html.DisplayNameFor(model => model[0].Order.Address)</dt>
+            <dd class="col-6">@Html.DisplayFor(model => model[0].Order.Address)</dd>
+
+        </dl>
+
+        <hr />
+
+        <div class="container offset-2">
+            <a class="btn btn-outline-primary" asp-action="OnlineUserOrderHistory">返回</a>
+        </div>
+    </div>
+
+</div>
+
+    

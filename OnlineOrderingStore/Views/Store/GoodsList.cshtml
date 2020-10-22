@@ -1,0 +1,120 @@
+﻿@model GoodsSearchWIthTypeSearchViewModel
+
+@{
+    ViewData["Title"] = "商品管理";
+}
+
+<h1 class="text-center">商品</h1>
+
+<hr />
+<div class="container row form-inline">
+    <p class="col-md-4">
+        <a class="btn btn-info btn-block" asp-action="GoodsCreate">发布商品</a>
+    </p>
+
+    <form asp-controller="Store" asp-action="GoodsList" method="post">
+            <p>
+                <select class="form-control" asp-for="GoodsTypeName" asp-items="Model.GoodsTypes">
+                    <option value="">全部</option>
+                </select>
+                <input asp-for="SearchString" class="form-control" placeholder="请输入关键字" />
+                <button type="submit" class="btn btn-outline-info">搜索</button>
+            </p>
+        </form>
+</div>
+
+<table class="table table-hover">
+    <thead class="text-center">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Goods[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Goods[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Goods[0].Stock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Goods[0].ReleaseTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Goods[0].EditTime)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Goods[0].GoodsType)
+            </th>
+
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        @foreach (var item in Model.Goods)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td id="item_@item.Id">
+                    @Html.DisplayFor(modelItem => item.Stock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReleaseTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EditTime)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.GoodsType.GoodsTypeName)
+                </td>
+
+                <td>
+                    @if (item.Stock == 0)
+                    {
+                        <button disabled class="btn btn-outline-dark">库存清零</button>
+                    }
+                    else
+                    {
+                        <button data-action="makezero" data-id="@item.Id" class="btn btn-outline-secondary">库存清零</button>
+                    }
+
+                    <a class="btn btn-outline-info" asp-action="GoodsDetails" asp-route-goodsid="@item.Id">查看</a>
+                    <a class="btn btn-outline-warning" asp-action="GoodsEdit" asp-route-goodsid="@item.Id">修改</a>
+                    <a class="btn btn-outline-danger" asp-action="GoodsDelete" asp-route-goodsid="@item.Id">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script>
+        $("[data-action=makezero]").on('click',function () {
+            var id = $(this).data('id')
+            layer.confirm('确定清零吗？', {
+                icon: 2,
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                    $.get("/store/GoodsStockMakeZero/",
+                        {"id": id},
+                        function (res) {
+                            if (res) {
+                                $("#item_" + id).text("0");
+                                layer.msg('清零完成！', {icon: 1});
+                            } else {
+                                layer.msg("清空失败，请重试！", {
+                                    time: 2000 //2s后自动关闭
+                                });
+                            }
+                            
+                        }
+                )
+            })
+        });
+    </script>
+}

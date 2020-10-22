@@ -1,0 +1,75 @@
+﻿@model GoodsEditViewModel
+
+@{
+    ViewData["Title"] = "商品编辑";
+    var pothotoPath = "~/images/" + (Model.Goods.PhotoPath ?? "noimage.jpg");
+}
+
+<h1 class="text-center">编辑信息</h1>
+
+<hr />
+
+<div class="row justify-content-center m-3">
+    <div class="col-md-8 col-sm-10 col-lg-4">
+        <form asp-action="GoodsEdit" asp-route-goodsId="@Model.Goods.Id" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <label class="text-danger">@ViewData["Exist"]</label>
+
+            <input type="hidden" asp-for="@Model.Goods.Id" />
+            <input type="hidden" asp-for="@Model.Goods.StoreUserId" />
+            <input type="hidden" asp-for="@Model.Goods.ReleaseTime" />
+            <input type="hidden" asp-for="@Model.Goods.EditTime" />
+            <div class="form-group">
+                <label asp-for="Goods.Name" class="control-label"></label>
+                <input asp-for="Goods.Name" class="form-control" />
+                <span asp-validation-for="Goods.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Goods.Price" class="control-label"></label>
+                <input asp-for="Goods.Price" class="form-control" />
+                <span asp-validation-for="Goods.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Goods.Stock" class="control-label"></label>
+                <input asp-for="Goods.Stock" class="form-control" />
+                <span asp-validation-for="Goods.Stock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Goods.GoodsType" class="control-label"></label>
+                <select asp-for="Goods.GoodsTypeId" class="form-control" asp-items="ViewBag.GoodsTypeList">
+                    <option selected value="">请选择分类</option>
+                </select>
+                <span asp-validation-for="Goods.GoodsTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Goods.PhotoPath" class="control-label"></label>
+
+                <div class="custom-file">
+                    <input asp-for="Photo" class="form-control custom-file-input">
+                    <label class="custom-file-label">更换相片</label>
+                </div>
+            </div>
+
+            <hr />
+            <img class="col-md-12" src="@pothotoPath" asp-append-version="true" />
+            <hr />
+
+            <div class="form-group">
+                <input class="btn btn-outline-success" type="submit" value="保存" />
+                <a class="btn btn-outline-primary" asp-action="GoodsList">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
+                });
+            });
+    </script>
+}

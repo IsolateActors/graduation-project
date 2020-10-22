@@ -1,0 +1,66 @@
+﻿@model GoodsCreateViewModel
+
+@{
+    ViewData["Title"] = "发布商品";
+}
+
+<h1 class="text-center">发布商品</h1>
+
+<hr />
+
+<div class="row justify-content-center m-3">
+    <div class="col-md-8 col-sm-10 col-lg-4">
+        <form asp-action="GoodsCreate" method="post" enctype="multipart/form-data">
+
+            <label class="text-danger">@ViewData["Exist"]</label>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Stock" class="control-label"></label>
+                <input asp-for="Stock" class="form-control" />
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GoodsTypeId" class="control-label"></label>
+                <select asp-for="GoodsTypeId" class="form-control" asp-items="ViewBag.GoodsTypeList">
+                    <option selected value="">请选择分类</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Photo" class="control-label"></label>
+
+                <div class="custom-file">
+                    <input asp-for="Photo" class="form-control custom-file-input">
+                    <label class="custom-file-label">上传照片</label>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="form-group">
+                <input class="btn btn-outline-success" type="submit" value="发布" />
+                <a class="btn btn-outline-primary" asp-action="GoodsList">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
+                });
+            });
+    </script>
+}
+

@@ -1,0 +1,69 @@
+﻿@model StoreUserGoodsWithOrderDetailsViewModel
+@{
+    ViewData["Title"] = "订单信息";
+}
+
+    <h1 class="text-center">订单信息</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-10 col-lg-4">
+            <hr />
+            <dl class="row offset-sm-2">
+                @if (Model.DeliveredGoods != null && Model.NotDeliveredGoods == null)
+                {
+                    @foreach (var item in Model.DeliveredGoods)
+                    {
+                        <dt class="col-6">@item.Goods.Name</dt>
+                        <dd class="col-6">   x @item.BuyCount</dd>
+                    }
+                    <dt class="col-6">@Html.DisplayNameFor(model => model.DeliveredGoods[0].DeliveredTime)</dt>
+                    <dd class="col-6">@Model.DeliveredGoods[0].DeliveredTime</dd>
+
+                    <dt class="col-6">@Html.DisplayNameFor(model => model.DeliveredGoods[0].Order.ConsigneeName)</dt>
+                    <dd class="col-6">@Html.DisplayFor(model => model.DeliveredGoods[0].Order.ConsigneeName)</dd>
+
+                    <dt class="col-6">@Html.DisplayNameFor(model => model.DeliveredGoods[0].Order.Phone)</dt>
+                    <dd class="col-6">@Html.DisplayFor(model => model.DeliveredGoods[0].Order.Phone)</dd>
+
+                    <dt class="col-6">@Html.DisplayNameFor(model => model.DeliveredGoods[0].Order.Address)</dt>
+                    <dd class="col-6">@Html.DisplayFor(model => model.DeliveredGoods[0].Order.Address)</dd>
+
+                }
+
+                @if (Model.NotDeliveredGoods != null && Model.DeliveredGoods == null)
+                {
+                    @foreach (var item in Model.NotDeliveredGoods)
+                    {
+                        <dt class="col-6">@item.Goods.Name</dt>
+                        <dd class="col-6">   x @item.BuyCount</dd>
+                    }
+                    <dt class="col-6">@Html.DisplayNameFor(model => model.NotDeliveredGoods[0].Order.CreateTime)</dt>
+                    <dd class="col-6">@Model.NotDeliveredGoods[0].Order.CreateTime</dd>
+
+                    <dt class="col-6">@Html.DisplayNameFor(model => model.NotDeliveredGoods[0].Order.ConsigneeName)</dt>
+                    <dd class="col-6">@Html.DisplayFor(model => model.NotDeliveredGoods[0].Order.ConsigneeName)</dd>
+
+                    <dt class="col-6">@Html.DisplayNameFor(model => model.NotDeliveredGoods[0].Order.Phone)</dt>
+                    <dd class="col-6">@Html.DisplayFor(model => model.NotDeliveredGoods[0].Order.Phone)</dd>
+
+                    <dt class="col-6">@Html.DisplayNameFor(model => model.NotDeliveredGoods[0].Order.Address)</dt>
+                    <dd class="col-6">@Html.DisplayFor(model => model.NotDeliveredGoods[0].Order.Address)</dd>
+                }
+
+            </dl>
+
+            <hr />
+
+            <div class="container offset-2">
+                @if (Model.NotDeliveredGoods != null)
+                {
+                    <a class="btn btn-outline-danger" asp-action="GoodsWithOrderForDelivered" asp-route-id="@Model.NotDeliveredGoods[0].OrderId">配送</a>
+                }
+
+                <a class="btn btn-outline-primary" asp-action="StoreOrderIndex">返回</a>
+            </div>
+        </div>
+
+    </div>
+
+        

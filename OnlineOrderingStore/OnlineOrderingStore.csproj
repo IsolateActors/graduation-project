@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20191126033030_InitialCreate.cs" />
+    <Compile Remove="Migrations\20191126033030_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20191126033948_InitialCreate.cs" />
+    <Compile Remove="Migrations\20191126033948_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20191126035841_InitialCreate.cs" />
+    <Compile Remove="Migrations\20191126035841_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200209113006_StoreInitial.cs" />
+    <Compile Remove="Migrations\20200209113006_StoreInitial.Designer.cs" />
+    <Compile Remove="Migrations\20200214142216_RebuildDatabase.cs" />
+    <Compile Remove="Migrations\20200214142216_RebuildDatabase.Designer.cs" />
+    <Compile Remove="Migrations\20200214143718_Initial.cs" />
+    <Compile Remove="Migrations\20200214143718_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200214152548_Initial.cs" />
+    <Compile Remove="Migrations\20200214152548_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200216061014_AddAdminUser.cs" />
+    <Compile Remove="Migrations\20200216061014_AddAdminUser.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\layer\layer.js" />
+    <None Include="wwwroot\lib\layer\mobile\layer.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+  </ItemGroup>
+
+</Project>

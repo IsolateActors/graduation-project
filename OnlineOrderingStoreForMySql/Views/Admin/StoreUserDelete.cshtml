@@ -1,0 +1,42 @@
+﻿@model StoreUser
+@{
+    ViewData["Title"] = "删除";
+}
+
+<h1 class="text-center">删除商家</h1>
+
+
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-sm-10 col-lg-4">
+        <hr />
+
+        <dl class="row offset-2">
+            <dt class="col-6">@Html.DisplayNameFor(model => model.StoreName)</dt>
+            <dd class="col-6">@Html.DisplayFor(model => model.StoreName)</dd>
+
+            <dt class="col-6">@Html.DisplayNameFor(model => model.Account)</dt>
+            <dd class="col-6">@Html.DisplayFor(model => model.Account)</dd>
+
+            <dt class="col-6">@Html.DisplayNameFor(model => model.PassWord)</dt>
+            <dd class="col-6">@Html.DisplayFor(model => model.PassWord)</dd>
+
+            <dt class="col-6">@Html.DisplayNameFor(model => model.RegisterTime)</dt>
+            <dd class="col-6">@Html.DisplayFor(model => model.RegisterTime)</dd>
+
+            <dt class="col-6">@Html.DisplayNameFor(model => model.StoreType.TypeName)</dt>
+            <dd class="col-6">@Html.DisplayFor(model => model.StoreType.TypeName)</dd>
+
+        </dl>
+
+        <hr />
+
+        <form asp-action="StoreUserDelete" class="container offset-2">
+            <input asp-for="ID" type="hidden" />
+            <input type="submit" value="确定" class="btn btn-outline-danger" />
+            <a class="btn btn-outline-primary" asp-action="StoreUsersIndex">取消</a>
+        </form>
+    </div>
+    
+</div>
+

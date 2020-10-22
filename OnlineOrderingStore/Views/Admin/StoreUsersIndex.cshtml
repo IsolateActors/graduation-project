@@ -1,0 +1,53 @@
+﻿@model StoreUserStoreTypeViewModel
+
+@{
+    ViewData["Title"] = "商家列表";
+}
+
+<h1 class="text-center">商家</h1>
+
+<hr />
+<div class="container row form-inline">
+    <p class="col-md-4">
+        <a class="btn btn-info btn-block" asp-action="StoreUserCreate">注册商家</a>
+    </p>
+
+    <form asp-controller="Admin" asp-action="StoreUsersIndex" method="post">
+        <p>
+            <select class="form-control" asp-for="StoreTypeName" asp-items="Model.StoreTypes">
+                <option value="">全部</option>
+            </select>
+            <input asp-for="SearchString" class="form-control" placeholder="请输入关键字" />
+            <button type="submit" class="btn btn-outline-info">搜索</button>
+        </p>
+    </form>
+</div>
+
+<table class="table table-hover">
+    <thead class="text-center">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.StoreUsers[0].StoreName)</th>
+            <th>@Html.DisplayNameFor(model => model.StoreUsers[0].Account)</th>
+            <th>@Html.DisplayNameFor(model => model.StoreUsers[0].RegisterTime)</th>
+            <th>@Html.DisplayNameFor(model => model.StoreUsers[0].StoreType.TypeName)</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        @foreach (var item in Model.StoreUsers)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.StoreName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Account)</td>
+                <td>@Html.DisplayFor(modelItem => item.RegisterTime)</td>
+                <td>@Html.DisplayFor(modelItem => item.StoreType.TypeName)</td>
+                <td>
+                    <a class="btn btn-outline-info" asp-action="StoreUserDetial" asp-route-id="@item.ID">查看</a>
+                    <a class="btn btn-outline-warning" asp-action="StoreUserEdit" asp-route-id="@item.ID">修改</a>
+                    <a class="btn btn-outline-danger" asp-action="StoreUserDelete" asp-route-id="@item.ID">删除</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

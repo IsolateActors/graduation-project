@@ -1,0 +1,63 @@
+﻿@model Goods
+
+@{
+    ViewData["Title"] = "删除";
+    var pothotoPath = "~/images/" + (Model.PhotoPath ?? "noimage.jpg");
+}
+
+<h1 class="text-center">删除商品</h1>
+
+<hr />
+
+<div class="container offset-md-4">
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Stock)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stock)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReleaseTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReleaseTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EditTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EditTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GoodsType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GoodsType.GoodsTypeName)
+        </dd>
+    </dl>
+</div>
+
+<div class="container col-md-4 offset-md-4">
+    <hr />
+    <img class="col-md-12" src="@pothotoPath" asp-append-version="true" />
+    <hr />
+</div>
+
+<form asp-action="GoodsDelete" method="post" class="container offset-md-4">
+    <input asp-for="@Model.Id" type="hidden" />
+    <input type="submit" value="确定" class="btn btn-outline-danger" />
+    <a class="btn btn-outline-primary" asp-action="GoodsList">取消</a>
+</form>

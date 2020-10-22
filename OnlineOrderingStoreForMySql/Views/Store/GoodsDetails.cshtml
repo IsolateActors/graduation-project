@@ -1,0 +1,66 @@
+﻿@model Goods
+
+@{
+    ViewData["Title"] = "商品信息";
+    var pothotoPath = "~/images/" + (Model.PhotoPath ?? "noimage.jpg");
+}
+
+<h1 class="text-center">详细信息</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-sm-10 col-lg-4">
+        <hr />
+        <dl class="row offset-2">
+            <dt class="col-6">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-6">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-6">
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+            <dd class="col-6">
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+            <dt class="col-6">
+                @Html.DisplayNameFor(model => model.Stock)
+            </dt>
+            <dd class="col-6">
+                @Html.DisplayFor(model => model.Stock)
+            </dd>
+            <dt class="col-6">
+                @Html.DisplayNameFor(model => model.ReleaseTime)
+            </dt>
+            <dd class="col-6">
+                @Html.DisplayFor(model => model.ReleaseTime)
+            </dd>
+            <dt class="col-6">
+                @Html.DisplayNameFor(model => model.EditTime)
+            </dt>
+            <dd class="col-6">
+                @Html.DisplayFor(model => model.EditTime)
+            </dd>
+            <dt class="col-6">
+                @Html.DisplayNameFor(model => model.GoodsType)
+            </dt>
+            <dd class="col-6">
+                @Html.DisplayFor(model => model.GoodsType.GoodsTypeName)
+            </dd>
+        </dl>
+
+        <hr />
+        <img class="col-md-12" src="@pothotoPath" asp-append-version="true" />
+        <hr />
+
+        <div class="container offset-2">
+            <a class="btn btn-outline-danger" asp-action="GoodsEdit" asp-route-goodsId="@Model.Id">编辑</a>
+
+            <a class="btn btn-outline-primary" asp-action="GoodsList">返回</a>
+        </div>
+    </div>
+</div>
+
+
+
+    

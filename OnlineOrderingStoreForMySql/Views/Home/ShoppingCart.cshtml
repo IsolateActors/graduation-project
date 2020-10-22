@@ -1,0 +1,214 @@
+﻿@model ShoppingCartForPayVIewModel
+
+@{
+    ViewData["Title"] = "购物车";
+    
+}
+
+<h1 class="text-center">购物车详情</h1>
+
+<hr />
+
+<div class="row justify-content-center m-3">
+    <div class="col-md-12">
+        <div class="card">
+            <form asp-controller="Home" asp-action="ShoppingCart" method="post">
+                <div class="card-body text-center">
+                    <table class="table table-hover">
+                        <thead class="text-center">
+                            <tr>
+                                <th>
+                                    店铺
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ShoppingCarts[0].Goods.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ShoppingCarts[0].Goods.Price)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ShoppingCarts[0].BuyCount)
+                                </th>
+                                <th>总价格</th>
+
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            @*@foreach (var item in Model.ShoppingCarts)*@
+                            @for (int i = 0; i < Model.ShoppingCarts.Count; i++)
+                            {
+                                var initialMoney = Model.ShoppingCarts[i].Goods.Price * Model.ShoppingCarts[i].BuyCount;
+
+                                <tr id="item_@Model.ShoppingCarts[i].Id">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model.ShoppingCarts[i].Goods.StoreUser.StoreName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model.ShoppingCarts[i].Goods.Name)
+                                    </td>
+                                    <td id="money_@Model.ShoppingCarts[i].Id">
+                                        @Html.DisplayFor(modelItem => Model.ShoppingCarts[i].Goods.Price)
+                                    </td>
+
+                                    <td>
+                                        <div class="row justify-content-center">
+                                            <button type="button" data-action="reduce" data-id="@Model.ShoppingCarts[i].Id" class="btn btn-secondary"> - </button>
+                                            <input type="hidden" asp-for="@Model.ShoppingGoodsWithBuyCounts[i].Id" value="@Model.ShoppingCarts[i].GoodsID" />
+                                            <input asp-for="@Model.ShoppingGoodsWithBuyCounts[i].BuyCount" data-action="goodsCount"
+                                                   data-id="@Model.ShoppingCarts[i].Id" id="goodsCount_@Model.ShoppingCarts[i].Id" type="text"
+                                                   class="form-control col-2 ml-2 mr-2" value="@Model.ShoppingCarts[i].BuyCount" />
+                                            <button type="button" data-action="add" data-id="@Model.ShoppingCarts[i].Id" class="btn btn-secondary">+</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        合计: ￥<span id="allMoney_@Model.ShoppingCarts[i].Id" class="initialMoney">@initialMoney</span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger" data-action="del" data-id="@Model.ShoppingCarts[i].Id">删除</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr />
+                <h4 class="text-center">支付金额: ￥<span class="sumForMoney">0</span></h4>
+                <input asp-for="AllPay" type="hidden" class="allMoneyForInput" />
+                <hr />
+                <div class="row justify-content-center m-3">
+                    <label class="control-label col-md-2">收货人：</label>
+                    <input asp-for="ConsigneeName" class="form-control col-md-8" placeholder="请输入姓名" />
+                </div>
+                <span asp-validation-for="ConsigneeName" class="text-danger row offset-md-3"></span>
+                <div class="row justify-content-center m-3">
+                    <label class="control-label col-md-2">电话：</label>
+                    <input asp-for="Phone" class="form-control col-md-8" placeholder="请输入手机号" />
+                </div>
+                <span asp-validation-for="Phone" class="text-danger row offset-md-3"></span>
+                <div class="row justify-content-center m-3">
+                    <label class="control-label col-md-2">地址：</label>
+                    <input asp-for="Address" class="form-control col-md-8" placeholder="请输入地址及宿舍号" />
+                </div>
+                <span asp-validation-for="Address" class="text-danger row offset-md-3"></span>
+
+
+                <div class="card-footer text-center">
+                    <a asp-controller="home" asp-action="index"
+                       class="btn btn-outline-primary">取消</a>
+                    <button type="submit" class="btn btn-outline-warning">立即支付</button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        
+        function sum() {
+            var sumMoney = 0;
+            $(".initialMoney").each(function () {
+                var money = parseFloat($(this).text());
+                sumMoney += money;
+            });
+            var sumMoneyToFixed =sumMoney.toFixed(2);
+            $(".sumForMoney").text(sumMoneyToFixed);
+            $(".allMoneyForInput").val(sumMoneyToFixed);
+        };
+        $(sum());//初始化支付金额
+        
+        $("[data-action=add]").on("click", function () {
+            var id = $(this).data('id');
+            var count = $("#goodsCount_" + id);
+            var money = $("#money_" + id).text();
+            var allMoney = $("#allMoney_" + id);
+            
+            count.val(parseInt(count.val()) + 1); //点击加号输入框数值加1
+            //显示总金额
+            var num = count.val();
+            var total = (money * num).toFixed(2);   //输入框中的份额数与每份金额数相乘得到总金额
+            allMoney.text(total);
+            if (count.val() <= 0) {
+                count.text(1);
+                allMoney.text(money);
+            }
+
+            sum();
+
+        });
+        $("[data-action=reduce]").click(function () {
+            var id = $(this).data('id');
+            var count = $("#goodsCount_" + id);
+            var money = $("#money_" + id).text();
+            var allMoney = $("#allMoney_" + id);
+            count.val(parseInt(count.val()) - 1); //点击减号输入框数值减1
+            if (count.val() <= 0) {
+                count.val(parseInt(count.val()) + 1); //最小值为1
+            }
+
+            var num = count.val();
+            var total = (money * num).toFixed(2);   //输入框中的份额数与每份金额数相乘得到总金额
+            allMoney.text(total);
+            if (count.val() <= 0) {
+                count.text(1);
+                allMoney.text(money);
+            }
+        });
+        $("[data-action=goodsCount]").keyup(function () {
+            var c = $(this);
+            if (/[^\d]/.test(c.val())) {//替换非数字字符
+                var amount = c.val().replace(/[^\d]/g, '');
+                $(this).val(amount);
+            }
+            if (c.val() == 0) {
+                $(this).val(1); //如果输入0，则置1
+            }
+
+            var id = c.data('id');
+            var count = $("#goodsCount_" + id);
+            var money = $("#money_" + id).text();
+            var allMoney = $("#allMoney_" + id);
+
+            var num = count.val();
+            var total = (money * num).toFixed(2);   //输入框中的份额数与每份金额数相乘得到总金额
+            allMoney.text(total);
+            if (count.val() <= 0) {
+                count.text(1);
+                allMoney.text(money);
+            }  //手动输入数值金额随之改变
+
+            sum();
+        });
+
+        //删除购物车商品
+        $("[data-action=del]").on('click',function () {
+            var id = $(this).data('id')
+            layer.confirm('确定删除吗？', {
+                icon: 2,
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                    $.get("/home/ShoppingCartForDelete/",
+                        {"id": id},
+                        function (result) {
+                            if (result) {
+                                $("#item_" + id).remove();
+                                sum();//重新计算支付金额
+                                layer.msg("删除成功！", {
+                                    time: 2000 //2s后自动关闭
+                                });
+                            } else {
+                                layer.msg("删除失败，找不到商品！", {
+                                    time: 2000 //2s后自动关闭
+                                });
+                            }
+                            
+                        }
+                )
+            })
+        });
+    </script>
+}

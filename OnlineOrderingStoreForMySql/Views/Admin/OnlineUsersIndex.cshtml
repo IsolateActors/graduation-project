@@ -1,0 +1,89 @@
+﻿@model OnlineUserSearchStringViewModel
+@{
+    ViewData["Title"] = "用户列表";
+}
+
+<h1 class="text-center">用户</h1>
+
+<hr />
+<div class="container row form-inline">
+    <p class="col-md-4">
+        <a asp-action="OnlineUserCreate" class="btn btn-info btn-block">注册用户</a>
+    </p>
+
+    <form asp-controller="Admin" asp-action="OnlineUsersIndex" method="post">
+        <p>
+            <input asp-for="SearchString" class="form-control" placeholder="请输入关键字" />
+            <button type="submit" class="btn btn-outline-info">搜索</button>
+        </p>
+    </form>
+</div>
+
+<table class="table table-hover">
+    <thead class="text-center">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.OnlineUsers[0].Name)</th>
+            <th>@Html.DisplayNameFor(model => model.OnlineUsers[0].Account)</th>
+            <th>@Html.DisplayNameFor(model => model.OnlineUsers[0].RegisterTime)</th>
+            <th>@Html.DisplayNameFor(model => model.OnlineUsers[0].EditTime)</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+
+    <tbody class="text-center">
+        @foreach (var item in Model.OnlineUsers)
+        {
+            <tr id="item_@item.ID">
+                <td>@Html.DisplayFor(model => item.Name)</td>
+                <td>@Html.DisplayFor(model => item.Account)</td>
+                <td>@Html.DisplayFor(model => item.RegisterTime)</td>
+                <td>@Html.DisplayFor(model => item.EditTime)</td>
+                <td>
+                    <button data-action="detial" data-id="@item.ID" class="btn btn-outline-info">查看</button>
+                    <a asp-action="OnlineUserEdit" asp-route-id="@item.ID" class="btn btn-outline-warning">修改</a>
+                    <button data-action="del" data-id="@item.ID" class="btn btn-outline-danger">删除</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@section Scripts{
+    <script>
+
+        $("[data-action=detial]").on('click', function () {
+            var id = $(this).data('id');
+
+            $.getJSON("/admin/OnlineUserDetial",
+                { "id": id },
+                function (res) {
+                    var name = res.name;
+                    var account = res.account;
+                    var psw = res.passWord;
+                    var rt = res.registerTime;
+                    var et = res.editTime;
+                    layer.alert('密码为：' + psw)
+                }, 'json');
+        });
+
+        $("[data-action=del]").on('click',function () {
+            var id = $(this).data('id')
+            layer.confirm('确定删除吗？', {
+                icon: 2,
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                    $.get("/admin/OnlineUserDelete/",
+                        {"id": id},
+                        function (result) {
+                            $("#item_" + id).remove();
+                            layer.msg(result, {
+                            time: 2000 //2s后自动关闭
+                            })
+                        }
+                )
+            })
+        });
+    </script>
+}

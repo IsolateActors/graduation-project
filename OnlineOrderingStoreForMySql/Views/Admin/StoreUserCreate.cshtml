@@ -1,0 +1,52 @@
+﻿@model StoreUser
+@{
+    ViewData["Title"] = "注册商店";
+}
+
+<h1 class="text-center">注册商店用户</h1>
+
+<hr />
+
+<div class="row justify-content-center m-3">
+    <div class="col-md-8 col-sm-10 col-lg-4">
+        <form asp-action="StoreUserCreate" method="post">
+
+            <label class="text-danger">@ViewData["Exist"]</label>
+
+            <div class="form-group">
+                <label asp-for="StoreName" class="control-label"></label>
+                <input asp-for="StoreName" class="form-control" placeholder="请输入店铺名称"/>
+                <span asp-validation-for="StoreName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Account" class="control-label"></label>
+                <input asp-for="Account" class="form-control" placeholder="请输入账号" />
+                <span asp-validation-for="Account" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PassWord" class="control-label"></label>
+                <input asp-for="PassWord" type="password" class="form-control" placeholder="请输入密码" />
+                <span asp-validation-for="PassWord" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StoreType.TypeName" class="control-label"></label>
+                <select asp-for="StoreTypeID" asp-items="ViewBag.TypeList" class="form-control">
+                    <option selected value="">请选择店铺类型</option>
+                    @*@foreach (var item in ViewBag.Type)
+            {
+                <option value="@item.ID">@item.TypeName</option>
+            }*@
+                </select>
+                <span asp-validation-for="StoreTypeID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input class="btn btn-outline-success" type="submit" value="注册" />
+                <a class="btn btn-outline-primary" asp-action="StoreUsersIndex">返回</a>
+            </div>
+        </form>
+    </div>
+</div>

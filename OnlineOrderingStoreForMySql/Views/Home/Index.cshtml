@@ -1,0 +1,100 @@
+﻿@model HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "首页";
+}
+
+<div class="container row form-inline">
+    <div class="col-md-8">
+        <form asp-controller="Home" asp-action="Index" method="post">
+            <div class="container" style="display: inline-block">
+                <select id="downSelectStoreTypeName" asp-for="StoreTypeName" asp-items="@ViewBag.StoreTypeName" class="form-control">
+                    <option disabled selected value="">店铺类型</option>
+                    <option value="">全部</option>
+                </select>
+                <select id="downSelectStoreName" asp-for="StoreName" asp-items="@ViewBag.StoreName" class="form-control">
+                    <option disabled selected value="">店铺</option>
+                    <option value="">全部</option>
+                </select>
+                <select id="downSelectGoodsTypeName" asp-for="GoodsTypeName" asp-items="@ViewBag.GoodsTypeName" class="form-control">
+                    <option disabled selected value="">分类</option>
+                    <option value="">全部</option>
+                </select>
+                <input asp-for="SearchingString" class="form-control" placeholder="请输入关键字" />
+                <button id="submitButton" type="submit" class="btn btn-outline-info">搜索</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-4 row justify-content-md-end">
+        <a asp-controller="Home" asp-action="OnlineUserOrderHistory" class="btn btn-outline-info mr-md-1">历史订单</a>
+        <a asp-controller="Home" asp-action="ShoppingCart" class="btn btn-outline-primary">购物车</a>
+    </div>
+
+</div>
+
+<hr />
+
+<div class="card-deck">
+    @foreach (var goods in Model.Goods)
+    {
+        var photoPath = "~/images/" + (goods.PhotoPath ?? "noimage.jpg");
+
+
+        <div class="col-sm-6">
+            <div class="card" style="margin:10px;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img style="width:100%; height:175px;" class="card-img-top imageThumbnail" src="@photoPath"
+                                 asp-append-version="true" />
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <h6 style="color:darkgray">@goods.StoreUser.StoreName</h6>
+                            <h5 style="color:burlywood">@goods.Name</h5>
+                            <h6>价格：￥@goods.Price</h6>
+                            <h6>库存：@goods.Stock</h6>
+                            @if (goods.Stock == 0)
+                            {
+                                <button disabled class="btn btn-outline-dark m-1">加入购物车</button>
+                                <button disabled class="btn btn-outline-dark m-1">立即购买</button>
+                            }
+                            else
+                            {
+                                <button data-acion="addGoodsInCart" data-id="@goods.Id" class="btn btn-outline-info m-1">加入购物车</button>
+                                <a asp-action="ShoppingForPay" asp-controller="Home" asp-route-goodsId="@goods.Id"
+                                   class="btn btn-outline-warning m-1">立即购买</a>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@section Scripts{
+    <script>
+
+        $("[data-acion=addGoodsInCart]").on('click', function () {
+            var id = $(this).data('id')
+            $.post("/home/AddGoodsInShoppingCart",
+                { "goodsId": id },
+                function (res) {
+                    if (res) {
+                        layer.msg('添加成功！');
+                    }
+                    else {
+                        layer.msg('添加失败，请先登录！');
+                    }
+                });
+        });
+
+        $("#downSelectStoreTypeName, #downSelectStoreName, #downSelectGoodsTypeName").change(function() {
+            $("#submitButton").click();
+        });
+        
+    </script>
+}
