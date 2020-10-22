@@ -16,19 +16,19 @@
 
 ### 结构图（部分）
 
-![blockchain](https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=702257389,1274025419&fm=27&gp=0.jpg "区块链")
+![结构图](https://user-images.githubusercontent.com/37364838/96826360-c8ea9000-1465-11eb-86ce-0e85d11d644b.png)
 
 
 ### E-R图
 
-![blockchain](https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=702257389,1274025419&fm=27&gp=0.jpg "区块链")
+![ER图](https://user-images.githubusercontent.com/37364838/96826398-def85080-1465-11eb-8460-a6a7c58dbd84.png)
 
 
 ### 1层数据流图
 
-![blockchain](https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=702257389,1274025419&fm=27&gp=0.jpg "区块链")
+![数据流图](https://user-images.githubusercontent.com/37364838/96826416-e881b880-1465-11eb-83fc-01a05413bd21.png)
 
 
 ### 首页展示
 
-![blockchain](https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=702257389,1274025419&fm=27&gp=0.jpg "区块链")
+![首页](https://user-images.githubusercontent.com/37364838/96826432-f1728a00-1465-11eb-9a40-67faba61c59b.png)
